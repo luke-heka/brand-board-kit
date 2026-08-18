@@ -1,0 +1,342 @@
+/* ==========================================================================
+   brand-board — deck stylesheet
+   Page grammar measured off the Soft River deck (1920x1080, 2025-09-10).
+   Visual values come from the brand's own tokens, injected as CSS variables
+   by the renderer. Nothing here hard-codes a hex.
+   Grid rationale and measurements: docs/GRID.md
+   ========================================================================== */
+
+/* --- reset ------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; }
+
+/* --- the page ---------------------------------------------------------- */
+.page {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: var(--body-weight);
+  -webkit-font-smoothing: antialiased;
+  page-break-after: always;
+  break-after: page;
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+
+/* Ink-ground pages (dividers on dark brands, cover variants) */
+.page--dark { background: var(--ground-dark); color: var(--ink-on-dark); }
+.page--accent { background: var(--accent); color: var(--ink-on-accent); }
+
+/* --- type ramp ---------------------------------------------------------
+   Tracking is always negative. -0.04em at 25px and up, -0.03em from 15-20px,
+   -0.025em at 13px. Nothing sits at default tracking.                     */
+.t-display-xl { font-family: var(--font-display); font-size: 120px; line-height: 1.0;  letter-spacing: -.04em; font-weight: var(--display-weight-xl); font-variation-settings: 'wght' var(--display-weight-xl); }
+.t-display    { font-family: var(--font-display); font-size: 80px;  line-height: 1.05; letter-spacing: -.04em; font-weight: var(--display-weight);    font-variation-settings: 'wght' var(--display-weight); }
+.t-section    { font-family: var(--font-display); font-size: 60px;  line-height: 1.05; letter-spacing: -.04em; font-weight: var(--display-weight);    font-variation-settings: 'wght' var(--display-weight); }
+.t-panel      { font-family: var(--font-display); font-size: 45px;  line-height: 1.1;  letter-spacing: -.04em; font-weight: var(--display-weight);    font-variation-settings: 'wght' var(--display-weight); }
+.t-card       { font-family: var(--font-display); font-size: 30px;  line-height: 1.3;  letter-spacing: -.04em; font-weight: var(--display-weight);    font-variation-settings: 'wght' var(--display-weight); }
+.t-lead       { font-size: 25px; line-height: 1.3;  letter-spacing: -.04em; }
+.t-body       { font-size: 17px; line-height: 1.5;  letter-spacing: -.03em; }
+.t-small      { font-size: 15px; line-height: 1.5;  letter-spacing: -.03em; }
+.t-meta       { font-size: 13px; line-height: 1.4;  letter-spacing: -.025em; }
+
+.muted { color: var(--ink-muted); }
+.on-dark  { color: var(--ink-on-dark); }
+.on-dark .muted { color: var(--ink-on-dark-muted); }
+
+/* --- footer, on every page except the cover ---------------------------- */
+.footer {
+  position: absolute; left: var(--margin); right: var(--margin);
+  bottom: 0; height: 95px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.footer__brand { font-size: 17px; letter-spacing: -.03em; font-weight: var(--body-weight); }
+.footer__right { display: flex; align-items: baseline; gap: 34px; }
+.footer__legal { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); }
+.footer__page  { font-size: 13px; letter-spacing: -.025em; font-weight: var(--body-weight); min-width: 22px; text-align: right; }
+
+/* --- the two-column content page --------------------------------------- */
+.content {
+  position: absolute; inset: 0;
+  padding: var(--safe-top) var(--margin) 0 var(--margin);
+}
+/* The title owns the column to the LEFT of the panel and nothing more. Without a
+   width it is an absolutely-positioned shrink-to-fit box, so anything over ~9
+   characters at 80px runs under the panel and is painted over. 72px is the
+   largest size at which the longest section word the deck ships ("Components",
+   463px at 80px) still sets on one line inside this column; longer, multi-word
+   titles wrap inside it on a tighter leading. */
+.content__title {
+  position: absolute; left: var(--margin); top: var(--safe-top);
+  width: calc(var(--panel-x) - var(--margin) - 24px);
+  line-height: 1.02;
+  overflow-wrap: break-word;   /* backstop: never paint under the panel */
+}
+.content__caption {
+  position: absolute; left: var(--margin);
+  bottom: 176px;                 /* baseline-locks the caption to the panel foot */
+  width: var(--caption-w);
+}
+.content__caption h3 { font-size: 20px; line-height: 1.35; letter-spacing: -.03em; font-weight: var(--body-weight); margin-bottom: 14px; }
+.content__caption p  { font-size: 17px; line-height: 1.5;  letter-spacing: -.03em; color: var(--ink-muted); }
+
+.panel {
+  position: absolute;
+  left: var(--panel-x); top: var(--safe-top);
+  width: var(--panel-w); height: var(--panel-h);
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.panel--plain { background: transparent; }
+.panel--pad   { padding: 56px; }
+.panel--top   { align-items: flex-start; }
+
+/* Overview runs as columns, not as a card. A single 1296px column of 17px body
+   is a 150-character measure, which is unreadable at any quality. */
+.overview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 64px 60px; width: 100%; }
+.ovblock h3 { margin-bottom: 20px; }
+.ovblock p  { max-width: 34em; }
+.panel--stack { flex-direction: column; align-items: stretch; justify-content: center; gap: var(--gap); }
+
+/* A panel that has to carry its own ground (reversed logo, ember lockup…) */
+.panel--dark   { background: var(--ground-dark); }
+.panel--accent { background: var(--accent); }
+
+/* --- cover -------------------------------------------------------------- */
+.cover { position: absolute; left: var(--margin); bottom: 176px; }
+.cover__type { margin-top: 20px; }
+.cover__mark { position: absolute; right: var(--margin); bottom: 176px; height: 120px; }
+
+/* --- divider ------------------------------------------------------------ */
+.divider { position: absolute; left: var(--margin); right: var(--margin); bottom: 95px;
+           display: flex; align-items: baseline; justify-content: space-between; gap: 80px; }
+/* The section word is bounded so it can never reach the numeral. The block is
+   bottom-anchored, so a title that wraps grows upward and the last line still
+   lands on the footer line rather than through it. */
+.divider > .t-display-xl { flex: 0 1 auto; min-width: 0; line-height: 1;
+                           max-width: calc(100% - 260px); overflow-wrap: break-word; }
+.divider__num { flex: 0 0 auto; margin-left: auto; white-space: nowrap;
+                font-family: var(--font-display); font-size: 120px; line-height: 1;
+                letter-spacing: -.04em; color: var(--ink-muted);
+                font-weight: var(--display-weight-xl); font-variation-settings: 'wght' var(--display-weight-xl); }
+
+/* --- table of contents -------------------------------------------------- */
+.toc { position: absolute; left: var(--margin); right: var(--margin); top: var(--safe-top); }
+.toc__label { color: var(--ink-muted); font-size: 30px; letter-spacing: -.04em;
+              font-family: var(--font-display); font-weight: var(--display-weight);
+              font-variation-settings: 'wght' var(--display-weight); margin-bottom: 42px; }
+/* The rows share whatever height is left between the label and the footer, so
+   a five-section deck and a nine-section deck both fill the page properly
+   instead of overflowing or stranding white space. A row is capped at the
+   measured 132px, so a two-section deck groups at the top instead of floating
+   two rows in 340px of air each; six rows or more still fill the page exactly. */
+.toc__rows { height: 810px; display: flex; flex-direction: column; }
+.toc__row { flex: 1; min-height: 0; max-height: 132px;
+            display: grid; grid-template-columns: 60px 420px 1fr 110px;
+            gap: 0 32px; align-content: center;
+            border-top: 1px solid var(--hairline); }
+.toc__row:last-child { border-bottom: 1px solid var(--hairline); }
+.toc__num  { font-size: 25px; letter-spacing: -.04em; color: var(--ink-muted); }
+.toc__name { font-family: var(--font-display); font-size: 30px; letter-spacing: -.04em;
+             font-weight: var(--display-weight); font-variation-settings: 'wght' var(--display-weight); }
+.toc__desc { font-size: 17px; line-height: 1.45; letter-spacing: -.03em; color: var(--ink-muted); padding-top: 4px; max-width: 640px; }
+.toc__pages{ font-size: 17px; letter-spacing: -.03em; color: var(--ink-muted); text-align: right; padding-top: 4px; }
+
+/* --- logo pages --------------------------------------------------------- */
+.lockup     { max-width: 78%; max-height: 300px; }
+/* Every item carries the same padding and stretches to the same height, so the
+   labels sit on one baseline whether or not an item has a coloured tile behind
+   it. Aligning tile bottoms instead dropped an untiled mark 34px low. */
+.markrow    { display: flex; align-items: stretch; justify-content: space-around; width: 100%; padding: 0 80px; }
+.markrow__i { display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+              gap: 34px; padding: 34px 44px; }
+.markrow__i img { height: 190px; }
+.markrow__i span{ font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); }
+
+/* clearspace — the measure is drawn, not described */
+.clear { position: relative; }
+.clear__box { position: relative; padding: var(--clear-pad); }
+.clear__rule { position: absolute; background: var(--accent); }
+.clear__tag  { position: absolute; font-size: 13px; letter-spacing: -.025em; color: var(--accent); }
+.clear__ghost{ position: absolute; inset: 0; border: 1px dashed var(--hairline-strong); }
+
+/* misuse — 2 x 3 */
+.dont { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap);
+        width: 100%; height: 100%; }
+.dont__cell { background: var(--canvas); border-radius: var(--radius-field);
+              display: flex; flex-direction: column; align-items: center; justify-content: center;
+              gap: 26px; padding: 28px; position: relative; }
+.dont__art { height: 74px; display: flex; align-items: center; justify-content: center; }
+/* An SVG with only a viewBox has no intrinsic size, so `max-height` alone
+   gives a flex-laid-out <img> nothing to size from and it collapses to
+   zero. An explicit height is the basis; inline max-height still caps it. */
+.dont__art img { height: 56px; width: auto; max-height: 74px; max-width: 260px; }
+.dont__cap { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); text-align: center; }
+.dont__x { position: absolute; top: 18px; right: 20px; width: 22px; height: 22px; }
+
+/* --- colour pages ------------------------------------------------------- */
+.swatches { display: flex; flex-direction: column; gap: 22px; width: 100%; height: 100%; }
+/* Every swatch carries a hairline ring. A pale swatch on a paper panel and a
+   near-black swatch on an ink panel are the same bug seen from opposite ends;
+   a 1px inset ring at ink alpha is invisible on a mid-tone and rescues both. */
+.swatch { flex: 1; border-radius: var(--radius-field); position: relative; min-height: 0;
+          box-shadow: inset 0 0 0 1px var(--hairline); }
+.swatch__label { position: absolute; left: 28px; bottom: 24px; }
+.swatch__label b { display: block; font-size: 15px; letter-spacing: -.03em; font-weight: var(--body-weight); }
+.swatch__label span { display: block; font-size: 13px; letter-spacing: -.025em; opacity: .72; font-variant-numeric: tabular-nums; }
+.swatch--bordered { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+
+.ramp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; width: 100%; }
+.ramp__chip { border-radius: var(--radius-field); height: 190px;
+              box-shadow: inset 0 0 0 1px var(--hairline); }
+.ramp__name { font-size: 15px; letter-spacing: -.03em; margin-top: 16px; }
+.ramp__hex  { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+
+/* --- typography pages --------------------------------------------------- */
+/* Variable-axis ramp. The shipping weights get the accent rule so the page
+   says "these three, out of all of these" rather than listing three near-twins. */
+.axis { display: flex; flex-direction: column; gap: 2px; margin-bottom: 34px; }
+.axis__row { display: grid; grid-template-columns: 90px 1fr; gap: 26px; align-items: baseline;
+             padding: 9px 0; border-left: 3px solid transparent; padding-left: 20px; }
+.axis__row--ship { border-left-color: var(--accent); }
+.axis__v { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted);
+           font-variant-numeric: tabular-nums; }
+.axis__row b { font-size: 40px; line-height: 1; letter-spacing: -.04em; }
+.axis__row--ship .axis__v { color: var(--accent); }
+
+.weights { display: flex; flex-direction: column; gap: 30px; width: 100%; }
+.weights__row { display: grid; grid-template-columns: 150px 1fr; gap: 32px; align-items: baseline; }
+.weights__name { font-size: 15px; letter-spacing: -.03em; color: var(--ink-muted); }
+.weights__spec { font-size: 24px; line-height: 1.45; letter-spacing: -.03em; word-break: break-all; }
+.weights__spec--compact { font-size: 20px; line-height: 1.3; word-break: normal; white-space: nowrap; }
+
+.scale { display: flex; flex-direction: column; gap: 22px; width: 100%; }
+.scale__row { display: grid; grid-template-columns: 110px 1fr; gap: 32px; align-items: baseline; }
+.scale__px { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.scale__spec { font-family: var(--font-display); letter-spacing: -.04em; line-height: 1;
+               font-weight: var(--display-weight); font-variation-settings: 'wght' var(--display-weight);
+               white-space: nowrap; }
+
+/* --- imagery ------------------------------------------------------------ */
+.registers { display: grid; gap: var(--gap); width: 100%; height: 100%; }
+.register { border-radius: var(--radius-field); overflow: hidden; position: relative;
+            display: flex; flex-direction: column; }
+.register__img { flex: 1; min-height: 0; background-size: cover; background-position: center; }
+.register__meta { padding: 22px 26px; background: var(--canvas); }
+.register__meta b { display: block; font-size: 17px; letter-spacing: -.03em; font-weight: var(--body-weight); }
+.register__meta span { display: block; font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); margin-top: 6px; }
+
+/* --- motion ------------------------------------------------------------- */
+/* One row, however many curves the brand ships. A fixed 3-column track left a
+   two-curve row a third short and stranded the fourth card on its own row. */
+.curves { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
+          gap: var(--gap); width: 100%; }
+.curve { background: var(--canvas); border-radius: var(--radius-field); padding: 30px; }
+.curve svg { display: block; width: 100%; height: 150px; }
+.curve b { display: block; font-size: 17px; letter-spacing: -.03em; margin-top: 22px; font-weight: var(--body-weight); }
+.curve code { display: block; font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); margin-top: 6px; font-family: var(--font-body); }
+.durations { display: flex; gap: 22px; width: 100%; margin-top: var(--gap); }
+.duration { flex: 1; background: var(--canvas); border-radius: var(--radius-field); padding: 26px 30px; }
+.duration b { display: block; font-size: 30px; letter-spacing: -.04em; font-family: var(--font-display);
+              font-weight: var(--display-weight); font-variation-settings: 'wght' var(--display-weight); }
+.duration span { display: block; font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); margin-top: 8px; }
+
+/* --- components --------------------------------------------------------- */
+.specimens { display: flex; flex-wrap: wrap; align-content: center; gap: 30px 26px; width: 100%; }
+.btn { display: inline-flex; align-items: center; gap: 12px;
+       border-radius: var(--radius-pill); padding: 18px 30px;
+       font-size: 17px; letter-spacing: -.03em; font-weight: var(--body-weight);
+       border: 1px solid transparent; }
+.btn__dot { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.btn--primary   { background: var(--accent); color: var(--ink-on-accent); }
+.btn--primary .btn__dot { background: var(--ink-on-accent); }
+.btn--secondary { background: transparent; color: var(--accent); border-color: var(--accent); }
+.btn--secondary .btn__dot { background: var(--accent); }
+.btn--dark { background: var(--ground-dark); color: var(--ink-on-dark); }
+.btn--dark .btn__dot { background: var(--ink-on-dark); }
+.field { width: 320px; border-radius: var(--radius-field); border: 1px solid var(--hairline-strong);
+         padding: 20px 24px; font-size: 17px; letter-spacing: -.03em; color: var(--ink-muted); }
+.radii { display: flex; gap: 26px; align-items: flex-end; }
+/* The demo square has to read against the panel whichever way round the brand
+   is. --canvas is only reliably different from --surface on a light brand; a
+   tint of the brand's own ink always differs from the panel it sits on. */
+.radii__i { width: 130px; height: 130px;
+            background: color-mix(in srgb, var(--ink) 7%, var(--surface));
+            box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+.radii__i span { display: none; }
+.radii__l { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); margin-top: 12px; display: block; }
+
+/* --- applications ------------------------------------------------------- */
+.sheet { display: grid; gap: var(--gap); width: 100%; height: 100%; }
+/* Contact-sheet cells. Images of different ratios letterbox, so the cell needs
+   its own visible ground and edge or the row reads as cells of different sizes.
+   Longhands, because the renderer sets background-image inline. */
+.sheet__cell { border-radius: var(--radius-field); overflow: hidden;
+               background-color: color-mix(in srgb, var(--ink) 6%, var(--surface));
+               background-position: center; background-size: contain;
+               background-repeat: no-repeat;
+               box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+
+/* --- closing page ------------------------------------------------------- */
+.closing { position: absolute; left: var(--margin); bottom: 176px; }
+
+/* A mark can name the ground it is meant to be seen on, so a paper mark is not
+   an invisible rectangle on a paper panel. */
+.markrow__i--dark, .markrow__i--accent { border-radius: var(--radius-field); padding: 34px 44px; }
+.markrow__i--dark   { background: var(--ground-dark); }
+.markrow__i--accent { background: var(--accent); }
+.markrow__i--dark span   { color: var(--label-on-dark); opacity: .78; }
+.markrow__i--accent span { color: var(--label-on-accent); opacity: .82; }
+
+/* --- dark structural pages ---------------------------------------------
+   The reference deck runs cover, dividers and closing full-bleed dark with a
+   huge outlined numeral. The jump between those and the light content pages is
+   the document's rhythm, and rendering them light flattens the whole thing. */
+.page--dark .footer__legal,
+.page--dark .footer__brand { color: var(--ink-on-dark-muted); }
+.page--dark .muted { color: var(--ink-on-dark-muted); }
+
+.divider__title { position: absolute; left: var(--margin); top: var(--safe-top);
+                  width: calc(100% - var(--margin) * 2 - 420px); }
+.divider__num {
+  position: absolute; right: var(--margin); bottom: 108px;
+  font-family: var(--font-display); font-size: 340px; line-height: .78;
+  letter-spacing: -.03em;
+  font-weight: var(--display-weight-xl);
+  font-variation-settings: 'wght' var(--display-weight-xl);
+  /* Outlined, not filled: the numeral is a frame, not a block of colour. */
+  color: transparent;
+  -webkit-text-stroke: 3px var(--ink-on-dark);
+}
+
+.cover { position: absolute; left: var(--margin); top: var(--safe-top); bottom: auto; }
+.cover__type { margin-top: 14px; }
+.cover__mark { position: absolute; right: var(--margin); bottom: 140px; height: 96px; }
+.closing { position: absolute; left: var(--margin); top: var(--safe-top); bottom: auto; }
+
+/* --- do and don't, the short deck's page ------------------------------- */
+.ddwrap { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); width: 100%; height: 100%; }
+.dd { border-radius: var(--radius-card); padding: 48px; }
+.dd h4 { font-family: var(--font-display); font-size: 30px; letter-spacing: -.04em;
+         font-weight: var(--display-weight); font-variation-settings: 'wght' var(--display-weight);
+         margin-bottom: 28px; }
+.dd ul { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+.dd li { font-size: 17px; line-height: 1.45; letter-spacing: -.03em; padding-left: 26px;
+         position: relative; }
+.dd li::before { position: absolute; left: 0; top: 0; font-weight: 700; }
+.dd--yes { background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.dd--no  { background: var(--surface); }
+.dd--yes li::before { content: "+"; color: var(--accent); }
+.dd--no  li::before { content: "\00d7"; color: var(--ink-muted); }
+
+/* --- what is in the kit ------------------------------------------------ */
+.filelist { width: 100%; display: flex; flex-direction: column; }
+.filerow { display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: baseline;
+           padding: 20px 0; border-top: 1px solid var(--hairline); font-size: 17px;
+           letter-spacing: -.03em; }
+.filerow:first-child { border-top: 0; }

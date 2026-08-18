@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" width="900" height="260">
+  <circle cx="120" cy="130.0" r="52" fill="none" stroke="#1F1F1F" stroke-width="18"/>
+  <rect x="112" y="78.0" width="16" height="104" rx="8" fill="#1F1F1F"/>
+  <text x="212" y="134.0" font-family="Inter, Helvetica, Arial, sans-serif"
+        font-size="64" font-weight="600" letter-spacing="-2" fill="#1F1F1F"
+        dominant-baseline="middle">Your Business</text>
+  <text x="212" y="192.0" font-family="Inter, Helvetica, Arial, sans-serif"
+        font-size="19" font-weight="400" letter-spacing="0.5" fill="#1F1F1F"
+        opacity="0.55" dominant-baseline="middle">PLACEHOLDER light ground</text>
+</svg>

@@ -1,0 +1,136 @@
+/* ==========================================================================
+   brand-board — the asset hub.
+   A screen document, not a printed one: it reflows from a phone to a desktop,
+   and every value it uses comes from the brand's own tokens.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: var(--body-weight);
+  -webkit-font-smoothing: antialiased;
+  /* A card mid-row must never push the document sideways on a narrow screen. */
+  overflow-x: hidden;
+}
+
+.wrap { max-width: 1280px; margin: 0 auto; padding: clamp(28px, 6vw, 80px) clamp(18px, 4vw, 64px); }
+
+/* --- head --------------------------------------------------------------- */
+.hub__head { display: flex; align-items: flex-end; justify-content: space-between;
+             gap: clamp(24px, 5vw, 72px); flex-wrap: wrap;
+             padding-bottom: clamp(24px, 4vw, 44px);
+             border-bottom: 1px solid var(--hairline); }
+.hub__mark { height: clamp(48px, 7vw, 76px); display: block; margin-bottom: 22px; }
+.hub__name { font-family: var(--font-display); font-size: clamp(44px, 9vw, 92px);
+             line-height: 1; letter-spacing: -.045em;
+             font-weight: var(--display-weight-xl);
+             font-variation-settings: 'wght' var(--display-weight-xl); }
+.hub__doc  { font-size: clamp(15px, 2.2vw, 20px); letter-spacing: -.04em;
+             color: var(--ink-muted); margin-top: 14px; }
+.hub__tally { max-width: 46ch; font-size: clamp(14px, 1.6vw, 17px); line-height: 1.55;
+              letter-spacing: -.03em; color: var(--ink-muted); }
+.hub__foot { margin-top: clamp(40px, 6vw, 72px); padding-top: 26px;
+             border-top: 1px solid var(--hairline); font-size: 13px;
+             letter-spacing: -.025em; color: var(--ink-muted); }
+
+/* --- the token kit ------------------------------------------------------ */
+.kit { margin-top: clamp(28px, 4vw, 44px); background: var(--surface);
+       border-radius: var(--radius-card); padding: clamp(22px, 3.2vw, 40px); }
+.kit__files { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.tok { display: block; text-decoration: none; color: inherit; padding: 22px 24px;
+       border-radius: var(--radius-field); background: var(--canvas);
+       box-shadow: inset 0 0 0 1px var(--hairline-strong);
+       transition: box-shadow .18s ease; }
+.tok:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+.tok b { display: block; font-size: 19px; letter-spacing: -.035em; font-weight: var(--body-weight); }
+.tok span { display: block; font-size: 13px; letter-spacing: -.025em;
+            color: var(--ink-muted); margin-top: 7px; }
+
+.kit__note { font-size: 14px; line-height: 1.55; letter-spacing: -.03em;
+             color: var(--ink-muted); margin-top: 26px; max-width: 62ch; }
+
+.copyline { display: flex; align-items: center; justify-content: space-between;
+            gap: 18px; flex-wrap: wrap; width: 100%; text-align: left; margin-top: 14px;
+            border: 0; border-radius: var(--radius-field); cursor: pointer;
+            padding: 18px 22px; background: var(--canvas);
+            box-shadow: inset 0 0 0 1px var(--hairline-strong);
+            font-family: var(--font-body); color: var(--ink);
+            transition: box-shadow .18s ease; }
+.copyline:hover, .copyline.is-copied { box-shadow: inset 0 0 0 2px var(--accent); }
+.copyline code { font-family: inherit; font-size: 14px; letter-spacing: -.02em;
+                 /* Wrapping beats a scrollbar: the line is meant to be read, then copied. */
+                 white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+.copyline .js-note { font-size: 12px; letter-spacing: -.02em; color: var(--accent);
+                     border: 1px solid var(--accent); border-radius: var(--radius-pill);
+                     padding: 7px 15px; white-space: nowrap; }
+
+/* --- groups ------------------------------------------------------------- */
+.group { margin-top: clamp(40px, 6vw, 76px); }
+.group__title { font-family: var(--font-display); font-size: clamp(28px, 4.4vw, 46px);
+                line-height: 1.05; letter-spacing: -.045em;
+                font-weight: var(--display-weight);
+                font-variation-settings: 'wght' var(--display-weight); }
+.group__note { max-width: 66ch; margin-top: 12px; font-size: clamp(14px, 1.6vw, 17px);
+               line-height: 1.55; letter-spacing: -.03em; color: var(--ink-muted); }
+.set__label { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted);
+              font-weight: var(--body-weight); margin: 30px 0 14px; }
+
+/* --- colour ------------------------------------------------------------- */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.swatch { display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
+          min-height: 138px; padding: 18px; cursor: pointer; text-align: left;
+          border: 0; border-radius: var(--radius-field);
+          font-family: var(--font-body); font-weight: var(--body-weight);
+          box-shadow: inset 0 0 0 1px var(--hairline);
+          transition: transform .18s ease; }
+.swatch--pale { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+.swatch:hover { transform: translateY(-2px); }
+.swatch b { font-size: 15px; letter-spacing: -.03em; font-weight: var(--body-weight); }
+.swatch span { font-size: 13px; letter-spacing: -.02em; opacity: .78;
+               font-variant-numeric: tabular-nums; }
+.swatch.is-copied span { opacity: 1; }
+
+/* --- assets ------------------------------------------------------------- */
+.assets { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+          gap: 16px; margin-top: 26px; }
+.asset { display: block; text-decoration: none; color: inherit; padding: 16px;
+         border-radius: var(--radius-card); background: var(--surface);
+         box-shadow: inset 0 0 0 1px var(--hairline);
+         transition: box-shadow .18s ease; min-width: 0; }
+.asset:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+
+/* A tint of the brand's own ink separates the frame from the card on a
+   light-on-dark brand, where --canvas and --surface can be the same value. */
+.asset__frame { display: flex; align-items: center; justify-content: center;
+                height: 150px; padding: 18px; border-radius: var(--radius-field);
+                background: color-mix(in srgb, var(--ink) 5%, var(--surface));
+                overflow: hidden; }
+.asset__frame--dark   { background: var(--ground-dark); }
+.asset__frame--accent { background: var(--accent); }
+.asset__frame img { max-width: 100%; max-height: 100%; width: auto; height: auto;
+                    display: block; object-fit: contain; font-size: 12px;
+                    letter-spacing: -.02em; color: var(--ink-muted); }
+
+.asset__name { display: block; margin-top: 14px; font-size: 15px; letter-spacing: -.03em;
+               line-height: 1.35; overflow-wrap: anywhere; }
+.asset__meta { display: flex; align-items: baseline; justify-content: space-between;
+               gap: 10px; margin-top: 6px; font-size: 12px; letter-spacing: -.02em;
+               color: var(--ink-muted); }
+/* Wrapping a filename strands the last letter of the extension on its own line
+   and leaves every card in the row a different height. The human label sits
+   above it, and the saved file carries the full name either way. */
+.asset__meta > span:first-child { min-width: 0; overflow: hidden;
+                                  text-overflow: ellipsis; white-space: nowrap; }
+.asset__size { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.asset:hover .asset__size { color: var(--accent); }
+
+@media (max-width: 420px) {
+  .assets   { grid-template-columns: 1fr 1fr; }
+  .swatches { grid-template-columns: 1fr 1fr; }
+  .asset__frame { height: 108px; padding: 12px; }
+}

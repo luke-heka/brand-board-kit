@@ -1,0 +1,156 @@
+/* ==========================================================================
+   brand-board — the board.
+   One canvas, titled sections, the whole identity visible at once. The Figma
+   ecosystem board rebuilt so nobody needs Figma to have one.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.board {
+  width: 2560px;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: var(--body-weight);
+  -webkit-font-smoothing: antialiased;
+  padding: 96px 80px 80px;
+}
+
+/* --- head --------------------------------------------------------------- */
+.board__head { display: flex; align-items: flex-end; justify-content: space-between;
+               gap: 80px; padding-bottom: 56px; border-bottom: 1px solid var(--hairline);
+               margin-bottom: 40px; }
+.board__mark { height: 96px; display: block; margin-bottom: 34px; }
+.board__name { font-family: var(--font-display); font-size: 120px; line-height: 1;
+               letter-spacing: -.04em; font-weight: var(--display-weight-xl);
+               font-variation-settings: 'wght' var(--display-weight-xl); }
+.board__doc  { font-size: 25px; letter-spacing: -.04em; color: var(--ink-muted); margin-top: 18px; }
+.board__line { max-width: 760px; font-size: 20px; line-height: 1.5; letter-spacing: -.03em;
+               color: var(--ink-muted); text-align: right; padding-bottom: 12px; }
+.board__foot { margin-top: 56px; padding-top: 30px; border-top: 1px solid var(--hairline);
+               font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); }
+
+/* --- grid --------------------------------------------------------------- */
+/* Cards in a row share the row's height. `start` left ragged voids wherever two
+   cards on the same row disagreed about how tall they were. */
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: stretch; }
+
+.card { background: var(--surface); border-radius: var(--radius-card); padding: 44px; }
+.card__title { font-family: var(--font-display); font-size: 45px; line-height: 1.1;
+               letter-spacing: -.04em; font-weight: var(--display-weight);
+               font-variation-settings: 'wght' var(--display-weight); margin-bottom: 34px; }
+.card__body > * + * { margin-top: 30px; }
+
+/* --- logo --------------------------------------------------------------- */
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.tile { background: var(--canvas); border-radius: var(--radius-field);
+        height: 230px; display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 22px; padding: 26px; position: relative; }
+.tile img { max-width: 78%; max-height: 110px; }
+.tile--dark   { background: var(--ground-dark); }
+.tile--accent { background: var(--accent); }
+.tile__cap { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); }
+.tile--dark .tile__cap   { color: var(--label-on-dark); opacity: .78; }
+.tile--accent .tile__cap { color: var(--label-on-accent); opacity: .82; }
+
+.markchips { display: flex; gap: 20px; }
+.markchip { flex: 1; background: var(--canvas); border-radius: var(--radius-field);
+            padding: 26px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.markchip img { height: 84px; }
+.markchip span { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); }
+
+/* --- colour ------------------------------------------------------------- */
+.chipgroup + .chipgroup { margin-top: 30px; }
+.chipgroup h3 { font-size: 15px; letter-spacing: -.03em; color: var(--ink-muted);
+                font-weight: var(--body-weight); margin-bottom: 16px; }
+.chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+/* Every chip carries a hairline ring — a near-black chip on an ink card is the
+   same bug as a pale chip on a paper card, seen from the other end. */
+.chip { height: 150px; border-radius: var(--radius-field); position: relative;
+        box-shadow: inset 0 0 0 1px var(--hairline); }
+.chip--pale { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+.chip span { position: absolute; left: 18px; bottom: 16px; font-size: 13px;
+             letter-spacing: -.025em; line-height: 1.5; }
+.chip em { font-style: normal; opacity: .72; font-variant-numeric: tabular-nums; }
+
+/* --- type --------------------------------------------------------------- */
+.specimen__big { font-size: 96px; line-height: 1; letter-spacing: -.04em;
+                 font-weight: var(--display-weight);
+                 font-variation-settings: 'wght' var(--display-weight); }
+.specimen__alpha { font-size: 26px; line-height: 1.5; letter-spacing: -.03em;
+                   color: var(--ink-muted); margin-top: 20px; word-break: break-all; }
+.wrows, .srows { display: flex; flex-direction: column; gap: 14px; }
+.wrow, .srow { display: grid; grid-template-columns: 110px 1fr; gap: 24px; align-items: baseline;
+               padding-top: 14px; border-top: 1px solid var(--hairline); }
+.wrow span, .srow span { font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted);
+                         font-variant-numeric: tabular-nums; }
+.wrow b { font-size: 26px; letter-spacing: -.03em; }
+.srow b { font-family: var(--font-display); line-height: 1.1;
+          font-weight: var(--display-weight); font-variation-settings: 'wght' var(--display-weight);
+          white-space: nowrap; }
+
+/* --- imagery ------------------------------------------------------------ */
+.shots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.shot__img { height: 220px; border-radius: var(--radius-field); background-size: cover;
+             background-position: center; margin-bottom: 16px; }
+.shot b { display: block; font-size: 17px; letter-spacing: -.03em; font-weight: var(--body-weight); }
+.shot span { display: block; font-size: 13px; letter-spacing: -.025em;
+             color: var(--ink-muted); margin-top: 6px; }
+
+/* --- motion ------------------------------------------------------------- */
+/* One row, however many curves the brand ships. */
+.curves { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 18px; }
+.curve { background: var(--canvas); border-radius: var(--radius-field); padding: 22px; }
+.curve svg { display: block; width: 100%; height: 110px; }
+.curve b { display: block; font-size: 15px; letter-spacing: -.03em; margin-top: 16px;
+           font-weight: var(--body-weight); }
+.curve code { display: block; font-size: 12px; letter-spacing: -.025em; color: var(--ink-muted);
+              margin-top: 6px; font-family: var(--font-body); }
+.pills { display: flex; flex-wrap: wrap; gap: 12px; }
+.pill { border: 1px solid var(--hairline-strong); border-radius: var(--radius-pill);
+        padding: 12px 20px; font-size: 13px; letter-spacing: -.025em; color: var(--ink-muted); }
+
+/* --- components --------------------------------------------------------- */
+.specimens { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; border-radius: var(--radius-pill);
+       padding: 18px 30px; font-size: 17px; letter-spacing: -.03em;
+       font-weight: var(--body-weight); border: 1px solid transparent; }
+.btn__dot { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.btn--primary { background: var(--accent); color: var(--ink-on-accent); }
+.btn--primary .btn__dot { background: var(--ink-on-accent); }
+.btn--secondary { background: transparent; color: var(--accent); border-color: var(--accent); }
+.btn--secondary .btn__dot { background: var(--accent); }
+.btn--dark { background: var(--ground-dark); color: var(--ink-on-dark); }
+.btn--dark .btn__dot { background: var(--ink-on-dark); }
+.field { width: 280px; border-radius: var(--radius-field); border: 1px solid var(--hairline-strong);
+         padding: 18px 22px; font-size: 17px; letter-spacing: -.03em; color: var(--ink-muted); }
+.radii { display: flex; gap: 18px; align-items: flex-end; }
+/* A tint of the brand's own ink always differs from the card it sits on, which
+   --canvas does not on a light-on-dark brand. */
+.radii__i { width: 92px; height: 92px;
+            background: color-mix(in srgb, var(--ink) 7%, var(--surface));
+            box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+.radii__l { font-size: 12px; letter-spacing: -.025em; color: var(--ink-muted);
+            margin-top: 10px; display: block; text-align: center; }
+
+/* --- story -------------------------------------------------------------- */
+.stories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; }
+.story h3 { font-family: var(--font-display); font-size: 30px; letter-spacing: -.04em;
+            font-weight: var(--display-weight); font-variation-settings: 'wght' var(--display-weight);
+            margin-bottom: 18px; }
+.story p { font-size: 17px; line-height: 1.5; letter-spacing: -.03em; color: var(--ink-muted); }
+
+/* --- applications ------------------------------------------------------- */
+.apps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
+/* Each cell needs its own visible ground and edge, or images of different
+   ratios letterbox into the card and the row reads as uneven cells.
+   Longhands, because the renderer sets background-image inline. */
+.app { aspect-ratio: 1 / 1; border-radius: var(--radius-field);
+       background-color: color-mix(in srgb, var(--ink) 6%, var(--surface));
+       background-position: center; background-size: contain; background-repeat: no-repeat;
+       box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+
+.markchip--dark   { background: var(--ground-dark); }
+.markchip--accent { background: var(--accent); }
+.markchip--dark span   { color: var(--label-on-dark); opacity: .78; }
+.markchip--accent span { color: var(--label-on-accent); opacity: .82; }

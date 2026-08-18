@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+out/
+figma/
+site/assets/
+.DS_Store

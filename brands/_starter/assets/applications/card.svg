@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <rect width="1200" height="900" fill="#F4F3F1"/>
+  <rect x="60" y="60" width="1080" height="780" rx="34" fill="none"
+        stroke="#1F1F1F" stroke-opacity="0.18" stroke-width="3" stroke-dasharray="16 12"/>
+  <circle cx="600.0" cy="354.0" r="74" fill="none" stroke="#2455E8" stroke-width="24"/>
+  <rect x="589.0" y="280.0" width="22" height="148" rx="11" fill="#2455E8"/>
+  <text x="600.0" y="524.0" text-anchor="middle" fill="#1F1F1F"
+        font-family="Inter, Helvetica, Arial, sans-serif" font-size="56" font-weight="600"
+        letter-spacing="-1.5">Business card</text>
+  <text x="600.0" y="586.0" text-anchor="middle" fill="#1F1F1F" opacity="0.55"
+        font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="400">
+    placeholder, replace with card.png
+  </text>
+</svg>

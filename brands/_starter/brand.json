@@ -1,0 +1,279 @@
+{
+  "_comment": "STARTER TEMPLATE. Copy this whole folder to brands/<your-slug>/, then work top to bottom. Keys beginning with _comment are ignored by every part of the engine and exist only to explain the file. Delete them once you no longer need them. Do not put a _comment key inside 'palette' or inside any list of colours, marks or registers: those are read value by value and a comment string there fails verify. Every asset path below is relative to this folder and must be a real file before the render will run. See README.md for the file list and docs/PAGE-KINDS.md for every page kind and key.",
+  "meta": {
+    "_comment": "slug MUST equal this folder's name. It names the output files, and verify looks for out/<folder>/<slug>-brand-presentation.pdf. If the two disagree, verify reports a missing PDF that is sitting right there.",
+    "slug": "_starter",
+    "name": "Your Business",
+    "wordmark": "Your Business",
+    "document": "Brand Guideline",
+    "boardTitle": "Brand Board",
+    "year": 2026,
+    "legal": "All rights reserved",
+    "closing": "Thank you",
+    "coverMark": "assets/logo/mark-reversed.svg",
+    "boardMark": "assets/logo/mark-primary.svg",
+    "line": "One sentence for the top of the board. Say the thing about this brand that is easiest to get wrong.",
+    "order": 100
+  },
+  "palette": {
+    "canvas": "#F4F3F1",
+    "surface": "#FFFFFC",
+    "ink": "#1F1F1F",
+    "inkMuted": "#5E5E5E",
+    "accent": "#2455E8",
+    "accentPressed": "#1B41B4",
+    "groundDark": "#1F1F1F",
+    "inkOnDark": "#FFFFFC",
+    "inkOnAccent": "#FFFFFC"
+  },
+  "shape": {
+    "_comment": "Only the three radii are safe to change. Leave margin, safeTop, gap, captionWidth, panelX, panelWidth and panelHeight out of this block entirely: they are one interlocking grid and the defaults are the ones that line up. docs/PAGE-KINDS.md explains the arithmetic.",
+    "radiusField": 20,
+    "radiusCard": 30,
+    "radiusPill": 40
+  },
+  "type": {
+    "_comment": "Any Google Fonts family name works. The first build fetches it and caches it into assets/fonts/ at the skill root, after which no network is needed. Set 'variable': true only for a face that really ships a weight axis. To use a licensed face instead, add \"file\": \"assets/fonts/yourface.woff2\" beside 'family'.",
+    "display": {
+      "family": "Inter",
+      "weights": [
+        400,
+        600
+      ],
+      "weight": 600,
+      "weightXL": 400
+    },
+    "body": {
+      "family": "Inter",
+      "weights": [
+        400,
+        600
+      ],
+      "weight": 400
+    }
+  },
+  "sections": [
+    {
+      "_comment": "'id' is not decoration. The brand board builds one card per section and looks the id up in a fixed list: overview, logo, colour, color, typography, imagery, motion, components, applications. A section with any other id still renders in the PDF and is silently absent from the board.",
+      "id": "overview",
+      "title": "Overview",
+      "summary": "What this business is, who it serves, and which parts of the brand are not written down yet.",
+      "pages": [
+        {
+          "kind": "overview",
+          "captionTitle": "Overview",
+          "caption": "Replace every block below with what is actually true. Where nothing has been decided, say so in the block rather than inventing a line that outlives the person who knew it was a guess.",
+          "blocks": [
+            {
+              "title": "What it is",
+              "body": "One plain sentence naming the product or service and who buys it. No adjectives that could describe any competitor."
+            },
+            {
+              "title": "Who it is for",
+              "body": "The specific buyer, described the way they would describe themselves. If two very different buyers are listed here, the brand is being asked to do two jobs."
+            },
+            {
+              "title": "How it should feel",
+              "body": "Three words, chosen so that their opposites are also plausible brands. Words no business would ever refuse are not choices."
+            },
+            {
+              "title": "Voice and tagline",
+              "body": "Not written yet. Nothing has been approved, so nothing is quoted here. Anything currently circulating as a tagline is a draft."
+            }
+          ]
+        },
+        {
+          "_comment": "A 'prose' page is the brand's own hard rules. The emitted Claude skill lifts these verbatim, so write them as instructions a stranger could follow.",
+          "kind": "prose",
+          "captionTitle": "Hard rules",
+          "caption": "Short, testable, and about this brand specifically. A rule that applies to every brand on earth teaches nothing.",
+          "items": [
+            "Never place the logo on a busy photograph. Use a flat ground or a scrim.",
+            "Never recolour the logo. Pick the variant that suits the ground instead.",
+            "One accent colour. Variety comes from photography, never from adding hexes.",
+            "Never stretch, rotate or add an effect to the artwork."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "logo",
+      "title": "Logo",
+      "summary": "The artwork, the grounds it is allowed to sit on, and the space it needs around it.",
+      "pages": [
+        {
+          "_comment": "'ground' picks the panel behind the artwork. Leave it out for the light card, or use 'dark' or 'accent'. A pale logo on a pale panel is invisible and correct, which is why the reversed lockup below asks for a dark ground.",
+          "kind": "lockup",
+          "variant": "Primary",
+          "src": "assets/logo/lockup-primary.svg",
+          "captionTitle": "Primary",
+          "caption": "The default everywhere. Say here what it is made of and where it is used."
+        },
+        {
+          "kind": "lockup",
+          "variant": "Reversed",
+          "src": "assets/logo/lockup-reversed.svg",
+          "ground": "dark",
+          "captionTitle": "Reversed",
+          "caption": "For dark grounds. Say which grounds count as dark for this brand."
+        },
+        {
+          "kind": "marks",
+          "captionTitle": "The mark",
+          "caption": "The symbol alone, for avatars, app icons and favicons. State the size below which the full lockup stops reading.",
+          "marks": [
+            {
+              "label": "Primary",
+              "src": "assets/logo/mark-primary.svg"
+            }
+          ]
+        },
+        {
+          "_comment": "The measure is drawn to scale, not described. ratioValue is the padding as a fraction of markHeight; 'ratio' is only the label printed beside it. Keep the two in agreement.",
+          "kind": "clearspace",
+          "src": "assets/logo/lockup-primary.svg",
+          "markHeight": 150,
+          "ratio": "1/4",
+          "ratioValue": 0.25,
+          "captionTitle": "Clear space",
+          "caption": "A quarter of the logo height on every side. Nothing crosses it. No type, no graphic, no page edge."
+        }
+      ]
+    },
+    {
+      "id": "colour",
+      "title": "Colour",
+      "summary": "The grounds, the ink, and the one accent that carries every call to action.",
+      "pages": [
+        {
+          "_comment": "These hexes are shown to the reader. They are not the same thing as the 'palette' block above, which colours the document itself. Keep them in step by hand.",
+          "kind": "colourStack",
+          "captionTitle": "Core",
+          "caption": "Three colours do the work. Say what each one is for, not what it looks like.",
+          "colours": [
+            {
+              "name": "Canvas",
+              "token": "canvas"
+            },
+            {
+              "name": "Ink",
+              "token": "ink"
+            },
+            {
+              "name": "Accent",
+              "token": "accent"
+            }
+          ]
+        },
+        {
+          "kind": "colourRamp",
+          "captionTitle": "Extended",
+          "caption": "Supporting values only. Nothing here is allowed to compete with the accent.",
+          "colours": [
+            {
+              "name": "Surface",
+              "token": "surface"
+            },
+            {
+              "name": "Line",
+              "hex": "#D8D5D0"
+            },
+            {
+              "name": "Ink muted",
+              "token": "inkMuted"
+            },
+            {
+              "name": "Accent pressed",
+              "token": "accentPressed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typography",
+      "title": "Typography",
+      "summary": "One family, the weights that ship, and the size each role is actually set at.",
+      "pages": [
+        {
+          "_comment": "Add an \"axis\" object here only for a variable face, for example \"axis\": {\"min\": 200, \"max\": 800, \"steps\": 7, \"word\": \"Capability\"}. On a static face it draws a ramp that is a lie.",
+          "kind": "typeface",
+          "family": "Inter",
+          "captionTitle": "The typeface",
+          "caption": "Name the family and say what each weight is for. If two families are in use, add a second page like this one.",
+          "weights": [
+            {
+              "name": "Regular 400",
+              "value": 400
+            },
+            {
+              "name": "Semibold 600",
+              "value": 600
+            }
+          ]
+        },
+        {
+          "_comment": "Every row is set at its true px value on the page, so a wrong number is visible rather than hidden. Tracking is negative and set per size.",
+          "kind": "typescale",
+          "captionTitle": "The scale",
+          "caption": "Measure these off the real site or the real deck. A scale that was guessed is worse than no scale page at all.",
+          "scale": [
+            {
+              "role": "Display",
+              "px": 80,
+              "tracking": "-0.04em"
+            },
+            {
+              "role": "Heading",
+              "px": 45,
+              "tracking": "-0.04em"
+            },
+            {
+              "role": "Card title",
+              "px": 30,
+              "tracking": "-0.04em"
+            },
+            {
+              "role": "Body",
+              "px": 17,
+              "tracking": "-0.03em"
+            },
+            {
+              "role": "Meta",
+              "px": 13,
+              "tracking": "-0.025em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "applications",
+      "title": "Applications",
+      "summary": "The system on real touchpoints, so the rules are seen working rather than described.",
+      "pages": [
+        {
+          "_comment": "'columns' is optional. Left out, it is 2 for four items or fewer and 3 above that. Each image fills its cell, so crop them to a similar aspect before dropping them in.",
+          "kind": "applications",
+          "captionTitle": "Touchpoints",
+          "caption": "Real artefacts only. Every one of these should use the colours and the family already declared, and introduce nothing new.",
+          "columns": 2,
+          "items": [
+            {
+              "src": "assets/applications/website.svg"
+            },
+            {
+              "src": "assets/applications/social.svg"
+            },
+            {
+              "src": "assets/applications/card.svg"
+            },
+            {
+              "src": "assets/applications/signage.svg"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

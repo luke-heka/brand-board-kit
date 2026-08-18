@@ -1,0 +1,307 @@
+/* ==========================================================================
+   brand-board — the brand page.
+   A screen document, not a printed one. Every value comes from the brand's own
+   tokens, so the page renders correctly whether the brand is dark-on-light or
+   light-on-dark. Nothing here assumes which way round it is.
+
+   House rules: no drop shadows, no negative tracking, every radius from a
+   token, and no element may push the document sideways at 375px.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: var(--body-weight);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; }
+
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(28px, 6vw, 80px) clamp(16px, 4vw, 64px);
+}
+
+/* --- hero ---------------------------------------------------------------- */
+.hero { padding-bottom: clamp(22px, 3vw, 34px); }
+.hero__mark { height: clamp(44px, 7vw, 76px); width: auto; display: block; margin-bottom: 24px; }
+.hero__name {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 88px);
+  line-height: 1.04;
+  font-weight: var(--display-weight-xl);
+  font-variation-settings: 'wght' var(--display-weight-xl);
+  overflow-wrap: anywhere;
+}
+.hero__doc { margin-top: 10px; font-size: clamp(15px, 2.2vw, 20px); color: var(--ink-muted); }
+.hero__line { margin-top: clamp(20px, 3vw, 32px); max-width: 62ch;
+              font-size: clamp(15px, 1.8vw, 19px); line-height: 1.55; }
+.hero__tally { margin-top: 14px; max-width: 62ch; font-size: clamp(14px, 1.6vw, 17px);
+               color: var(--ink-muted); }
+.hero__note { margin-top: 10px; max-width: 62ch; font-size: clamp(14px, 1.6vw, 17px);
+              color: var(--ink-muted); }
+
+/* --- sticky section nav --------------------------------------------------- */
+/* Full width of the wrap, by cancelling the wrap's own padding, so the rule
+   under it lines up with the content rather than floating inside it. */
+.secnav {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 calc(-1 * clamp(16px, 4vw, 64px));
+  padding: 9px clamp(16px, 4vw, 64px);
+  background: var(--canvas);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+/* One row that scrolls sideways. A nav that wraps to four lines on a phone is
+   a nav that has eaten the page it is meant to help you leave. */
+.secnav__chips {
+  display: flex; gap: 8px; flex: 1 1 auto; min-width: 0;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  padding: 2px 0;
+}
+.secnav__chips::-webkit-scrollbar { display: none; }
+
+/* Controls carry the full ink and metadata stays muted: on a brand whose muted
+   ink only clears AA at large sizes, a 13px label is the wrong place to spend
+   the contrast. */
+.chip {
+  flex: none; white-space: nowrap;
+  text-decoration: none; color: var(--ink);
+  font-size: 13px; padding: 7px 15px; border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline-strong); background: var(--surface);
+  transition: color .18s ease, border-color .18s ease, background .18s ease;
+}
+.chip:hover, .chip:focus-visible { color: var(--accent); border-color: var(--accent); }
+.chip.is-here {
+  color: var(--accent); border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}
+
+.secnav__all {
+  flex: none; cursor: pointer; font-family: var(--font-body);
+  font-weight: var(--body-weight); font-size: 13px; padding: 7px 15px;
+  color: var(--ink); background: var(--surface);
+  border: 1px solid var(--hairline-strong); border-radius: var(--radius-pill);
+  transition: color .18s ease, border-color .18s ease;
+}
+.secnav__all:hover, .secnav__all:focus-visible {
+  color: var(--accent); border-color: var(--accent);
+}
+
+/* --- section headings ---------------------------------------------------- */
+/* The offset clears the sticky bar: a heading that lands underneath it is a
+   link that looks broken. */
+.group, .sub { scroll-margin-top: 74px; }
+.group { margin-top: clamp(36px, 5vw, 68px); }
+.group__head, .sub__head {
+  display: flex; align-items: center; gap: 14px; cursor: pointer;
+  list-style: none; padding: 4px 0;
+}
+.group__head::-webkit-details-marker, .sub__head::-webkit-details-marker { display: none; }
+.group__head:focus-visible, .sub__head:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--radius-field);
+}
+/* The caret is drawn from two borders so it inherits the ink and needs no file. */
+.group__head::after, .sub__head::after {
+  content: ''; flex: none; margin-left: auto;
+  width: 9px; height: 9px; border-right: 2px solid var(--ink-muted);
+  border-bottom: 2px solid var(--ink-muted); transform: rotate(45deg) translate(-3px, -3px);
+  transition: transform .18s ease, border-color .18s ease;
+}
+details[open] > .group__head::after, details[open] > .sub__head::after {
+  transform: rotate(-135deg) translate(-3px, -3px);
+}
+.group__head:hover::after, .sub__head:hover::after { border-color: var(--accent); }
+
+.group__title {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; min-width: 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.4vw, 46px); line-height: 1.08;
+  font-weight: var(--display-weight);
+  font-variation-settings: 'wght' var(--display-weight);
+  overflow-wrap: anywhere;
+}
+.group__count, .sub__count {
+  font-family: var(--font-body); font-size: 13px; font-weight: var(--body-weight);
+  color: var(--ink-muted); border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill); padding: 3px 11px; line-height: 1.5;
+  white-space: nowrap;
+}
+.group__note { margin-top: 12px; max-width: 66ch; font-size: clamp(14px, 1.6vw, 17px);
+               color: var(--ink-muted); }
+.sub { margin-top: clamp(24px, 3vw, 36px); border-top: 1px solid var(--hairline); }
+.sub__head { padding-top: 12px; }
+.sub__title {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; min-width: 0;
+  font-size: clamp(16px, 2vw, 20px); font-weight: var(--body-weight);
+  overflow-wrap: anywhere;
+}
+.sub__body { padding-bottom: 4px; }
+/* Colour's sets are headings, not folds — ten swatches are not a wall — so they
+   carry the spacing a <details> would otherwise have given them. */
+.group__body > .sub__title { margin-top: clamp(26px, 3vw, 36px); }
+
+/* --- documents ----------------------------------------------------------- */
+/* `start` rather than the grid default: two documents of different shapes must
+   each be their own height, not both stretched to the taller one's. */
+.docs__grid { display: grid; align-items: start; gap: clamp(18px, 2.6vw, 28px);
+              margin-top: 26px; }
+.docs__grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); }
+
+.doc {
+  min-width: 0; padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid var(--hairline); border-radius: var(--radius-card);
+  background: var(--surface);
+}
+.doc:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.doc__title { font-family: var(--font-display); font-size: clamp(20px, 2.6vw, 27px);
+              line-height: 1.15; font-weight: var(--display-weight);
+              font-variation-settings: 'wght' var(--display-weight); }
+.doc__sub { margin-top: 6px; font-size: 14px; color: var(--ink-muted); }
+/* No fixed aspect: a document is whatever shape it was rendered at, and a one-
+   page board is far taller than a slide. The cap stops a tall document from
+   filling the window; the floor stops a wide one from collapsing to a strip. */
+.doc__stage {
+  margin-top: 18px; border-radius: var(--radius-field); overflow: hidden;
+  background: color-mix(in srgb, var(--ink) 6%, var(--surface));
+  display: flex; align-items: center; justify-content: center;
+  min-height: 180px; max-height: 76vh;
+}
+.doc__page { max-width: 100%; max-height: 76vh; width: auto; height: auto;
+             object-fit: contain; display: block; }
+
+.doc__bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.doc__nav {
+  width: 44px; height: 44px; flex: none; cursor: pointer;
+  border: 1px solid var(--hairline-strong); border-radius: var(--radius-pill);
+  background: var(--canvas); color: var(--ink); font-size: 17px; line-height: 1;
+  font-family: var(--font-body);
+  transition: border-color .18s ease, color .18s ease;
+}
+.doc__nav:hover, .doc__nav:focus-visible { border-color: var(--accent); color: var(--accent); }
+.doc__count { font-size: 14px; color: var(--ink-muted); font-variant-numeric: tabular-nums;
+              min-width: 5ch; text-align: center; }
+.doc__at { font-weight: var(--body-weight); color: var(--ink); }
+.doc__dl {
+  margin-left: auto; text-decoration: none; font-size: 14px; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: var(--radius-pill);
+  padding: 10px 18px; white-space: nowrap;
+  transition: background .18s ease, color .18s ease;
+}
+.doc__dl:hover, .doc__dl:focus-visible { background: var(--accent); color: var(--ink-on-accent); }
+
+/* --- asset cards --------------------------------------------------------- */
+.cards {
+  display: grid; gap: clamp(12px, 1.5vw, 18px); margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+}
+.card {
+  display: block; min-width: 0;
+  padding: 14px; border-radius: var(--radius-card);
+  border: 1px solid var(--hairline); background: var(--surface);
+  transition: border-color .18s ease;
+}
+.card:hover, .card:focus-within { border-color: var(--accent); }
+.card__hit { display: block; text-decoration: none; color: inherit; }
+.card__hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px;
+                           border-radius: var(--radius-field); }
+
+/* Only a generated asset has these: the render, the source that made it, and
+   the values the source reads. */
+.card__acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+.act {
+  text-decoration: none; font-size: 12px; line-height: 1.35; white-space: nowrap;
+  color: var(--ink); padding: 5px 11px;
+  border: 1px solid var(--hairline-strong); border-radius: var(--radius-pill);
+  transition: color .18s ease, border-color .18s ease;
+}
+.act:hover, .act:focus-visible { color: var(--accent); border-color: var(--accent); }
+.act--dl { color: var(--accent);
+           border-color: color-mix(in srgb, var(--accent) 45%, var(--hairline-strong)); }
+
+/* A tint of the brand's own ink keeps the frame distinct from the card even on
+   a brand whose canvas and surface are the same colour. */
+.card__frame {
+  display: flex; align-items: center; justify-content: center;
+  height: 148px; padding: 14px; border-radius: var(--radius-field);
+  background: color-mix(in srgb, var(--ink) 6%, var(--surface)); overflow: hidden;
+}
+.frame--dark { background: var(--ground-dark); }
+.card__frame img { max-width: 100%; max-height: 100%; width: auto; height: auto;
+                   display: block; object-fit: contain; }
+.frame__ext { font-size: 13px; color: var(--ink-muted); }
+
+.card__name { display: block; margin-top: 12px; font-size: 14px; line-height: 1.35;
+              overflow-wrap: anywhere; }
+.card__meta { display: flex; align-items: baseline; justify-content: space-between;
+              gap: 10px; margin-top: 6px; font-size: 12px; color: var(--ink-muted); }
+.card__size { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.card:hover .card__size { color: var(--accent); }
+
+/* --- colour -------------------------------------------------------------- */
+.swatches {
+  display: grid; gap: clamp(10px, 1.4vw, 14px); margin-top: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
+}
+.swatch {
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
+  min-width: 0; min-height: 130px; padding: 16px; cursor: pointer; text-align: left;
+  border: 1px solid var(--hairline); border-radius: var(--radius-field);
+  font-family: var(--font-body); font-weight: var(--body-weight);
+}
+.swatch--pale { border-color: var(--hairline-strong); }
+.swatch b { font-size: 15px; font-weight: var(--body-weight); overflow-wrap: anywhere; }
+.swatch span { font-size: 13px; opacity: .78; font-variant-numeric: tabular-nums; }
+.swatch.is-copied span { opacity: 1; }
+
+.tokens { display: grid; gap: 14px; margin-top: clamp(26px, 3vw, 34px);
+          grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
+.tok {
+  display: block; min-width: 0; text-decoration: none; color: inherit;
+  padding: 20px 22px; border-radius: var(--radius-field);
+  border: 1px solid var(--hairline-strong); background: var(--surface);
+  transition: border-color .18s ease;
+}
+.tok:hover, .tok:focus-visible { border-color: var(--accent); }
+.tok b { display: block; font-size: 18px; font-weight: var(--body-weight); }
+.tok span { display: block; margin-top: 6px; font-size: 13px; color: var(--ink-muted); }
+
+/* --- foot ---------------------------------------------------------------- */
+.foot { margin-top: clamp(48px, 6vw, 84px); padding-top: 24px;
+        border-top: 1px solid var(--hairline); font-size: 13px; color: var(--ink-muted); }
+
+@media (max-width: 480px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card { padding: 10px; }
+  .card__frame { height: 104px; padding: 10px; }
+  .card__acts { gap: 5px; margin-top: 9px; }
+  .act { font-size: 11px; padding: 4px 9px; }
+  .doc__dl { margin-left: 0; }
+  .secnav { gap: 8px; padding: 8px clamp(16px, 4vw, 64px); }
+  .group, .sub { scroll-margin-top: 62px; }
+}
+
+/* --- pending ------------------------------------------------------------
+   Styled like the asset cards on purpose. A gap should read as part of the
+   brand's inventory, not as an error message bolted on the end. */
+.pend__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.pend { background: var(--surface); border-radius: var(--radius-card); padding: 22px;
+        border: 1px dashed var(--hairline-strong); position: relative; }
+.pend__title { font-size: 17px; letter-spacing: -.03em; margin-bottom: 10px; }
+.pend__why { font-size: 14px; line-height: 1.5; letter-spacing: -.02em;
+             color: var(--ink-muted); margin-bottom: 12px; }
+.pend__fix { font-size: 14px; line-height: 1.5; letter-spacing: -.02em; }
+.pend__tag { display: inline-block; margin-top: 14px; font-size: 12px;
+             letter-spacing: -.02em; color: var(--ink-muted);
+             border: 1px solid var(--hairline); border-radius: var(--radius-pill);
+             padding: 4px 12px; }
